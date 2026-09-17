@@ -43,34 +43,24 @@ window.MODMODIFY_LIBRARY = {
   */
   artists: [
     {
-      id: "demo-artist",
-      name: "Demo Artist",
-      image: "assets/artists/demo-artist.png",
+      id: "ye",
+      name: "Ye",
+      image: "https://drive.google.com/file/d/1Z80tCgxQNn-C5fDMpdstixkgDkFUeTYH/view?usp=drive_link",
 
       albums: [
         {
-          id: "demo-album",
-          name: "Demo Album",
+          id: "yandhiv1",
+          name: "Yandhi V1",
           year: 2026,
-          cover: "assets/covers/demo-album.png",
+          cover: "https://drive.google.com/file/d/1Q6G4TmxC1TEatpbgqfb_e_itnQZABDCx/view?usp=drive_link",
 
           songs: [
             {
-              id: "demo-song",
-              name: "Demo Song",
-
-              // GOOGLE DRIVE EXAMPLE:
-              // audio: "https://drive.google.com/file/d/YOUR_MP3_FILE_ID/view?usp=sharing",
-
-              // Local file example:
-              audio: "assets/audio/demo-song.mp3",
-
-              // Optional song-specific cover:
-              // cover: "https://drive.google.com/file/d/YOUR_PNG_FILE_ID/view?usp=sharing",
-
-              duration: 0,
-
-              lyrics: "Add your lyrics here."
+              id: "byebyebaby",
+              name: "BYE BYE BABY",
+              audio: "https://drive.google.com/file/d/1CfMCS0cpJuxwur-zWZQ5UHTLGnIt6llx/view?usp=drive_link",
+              duration: 152,
+              lyrics: "Big booty bitch"
             }
           ]
         }
