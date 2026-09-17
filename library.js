@@ -1,27 +1,15 @@
 /*
   MODMODIFY — GOOGLE DRIVE EDITION
-  ============================================================
-  Store your music and images in Google Drive and paste the
-  share URL (or file ID) into library.js.
 
-  IMPORTANT:
+  Music and artwork live in Google Drive.
+  The website converts Drive sharing links automatically.
+
+  For Drive files:
   1. Upload the file to Google Drive.
-  2. Right-click → Share.
-  3. General access → Anyone with the link.
-  4. Viewer permission.
-  5. Copy the sharing URL and paste it below.
+  2. Share → General access → Anyone with the link → Viewer.
+  3. Paste the copied link into image/cover/audio below.
 
-  ModModify automatically turns a normal Google Drive sharing
-  link into a browser media URL.
-
-  Example:
-    audio: "https://drive.google.com/file/d/FILE_ID/view?usp=sharing"
-
-  You can also use:
-    audio: "FILE_ID"
-
-  Public direct URLs still work too:
-    audio: "https://example.com/song.mp3"
+  You may also paste a raw Google Drive file ID.
 */
 
 window.MODMODIFY_LIBRARY = {
@@ -31,16 +19,6 @@ window.MODMODIFY_LIBRARY = {
     cover: "assets/covers/modmodify-logo.png"
   },
 
-  /*
-    ARTISTS → ALBUMS → SONGS
-
-    Put your Google Drive sharing links directly into:
-      image
-      cover
-      audio
-
-    The page converts Drive share URLs automatically.
-  */
   artists: [
     {
       id: "ye",
@@ -73,7 +51,7 @@ window.MODMODIFY_LIBRARY = {
       id: "starter",
       name: "ModModify Starter",
       color: "#1ed760",
-      songIds: ["demo-song"]
+      songIds: ["byebyebaby"]
     }
   ]
 };
