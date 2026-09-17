@@ -36,7 +36,7 @@ window.MODMODIFY_LIBRARY = {
             {
               id: "byebyebaby",
               name: "BYE BYE BABY",
-              audio: "https://drive.google.com/file/d/1fmyp212NF6V4qe2HQVqGzbFPRscEug2r/view?usp=drive_link",
+              audio: "https://drive.google.com/file/d/1CfMCS0cpJuxwur-zWZQ5UHTLGnIt6llx/view?usp=drive_link",
               duration: 152,
               lyrics: "Big booty bitch"
             }
