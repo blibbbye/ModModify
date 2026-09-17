@@ -332,7 +332,7 @@
   // Drive sharing pages are NOT media URLs, so every Drive value is converted
   // before it is assigned to <img> or <audio>.
   function isDriveValue(value){
-    return /(?:drive\\.google\\.com|docs\\.google\\.com)/i.test(String(value || ""));
+    return /(?:drive\.google\.com|docs\.google\.com)/i.test(String(value || ""));
   }
 
   function resolveDriveUrl(value){
@@ -354,7 +354,7 @@
       return resolveDriveUrl(value);
     }
 
-    if(/^https?:\\/\\//i.test(value) || value.startsWith("data:") || value.startsWith("blob:")){
+    if(/^https?:\/\//i.test(value) || value.startsWith("data:") || value.startsWith("blob:")){
       return value;
     }
 
@@ -374,7 +374,7 @@
       if(id) return "https://drive.google.com/thumbnail?id=" + encodeURIComponent(id) + "&sz=w1600";
     }
 
-    if(/^https?:\\/\\//i.test(value) || value.startsWith("data:") || value.startsWith("blob:")){
+    if(/^https?:\/\//i.test(value) || value.startsWith("data:") || value.startsWith("blob:")){
       return value;
     }
 
