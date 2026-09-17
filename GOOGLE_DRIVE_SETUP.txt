@@ -1,0 +1,10 @@
+GOOGLE DRIVE SETUP
+
+1. Upload MP3/PNG/JPG to Drive.
+2. Right-click → Share.
+3. General access → Anyone with the link → Viewer.
+4. Copy the share URL.
+5. Paste the URL into library.js as audio/cover/image.
+
+Example:
+audio: "https://drive.google.com/file/d/FILE_ID/view?usp=sharing"
