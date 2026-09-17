@@ -301,7 +301,7 @@
     else state.queueIndex = state.queue.indexOf(id);
 
     state.currentId = id;
-    audio.src = resolveAsset(s.audio || "");
+    setAudioSourceWithFallback(s);
     audio.play().catch(()=>toast("Press play to start audio."));
     state.history = [id, ...state.history.filter(x=>x!==id)].slice(0,100);
     savePrefs();
@@ -313,24 +313,20 @@
   function extractDriveId(value){
     if(!value) return "";
     const s = String(value).trim();
-    // Raw ID
+
+    // Raw Google Drive file ID
     if(/^[A-Za-z0-9_-]{20,}$/.test(s)) return s;
 
-    // Common Drive URL formats:
-    // https://drive.google.com/file/d/FILE_ID/view
-    // https://drive.google.com/open?id=FILE_ID
-    // https://drive.google.com/uc?id=FILE_ID
-    // https://docs.google.com/uc?id=FILE_ID
+    // Common Drive sharing URL formats
     const m1 = s.match(/\/d\/([A-Za-z0-9_-]{20,})/);
     if(m1) return m1[1];
+
     const m2 = s.match(/[?&]id=([A-Za-z0-9_-]{20,})/);
     if(m2) return m2[1];
+
     return "";
   }
 
-  // Google Drive helpers.
-  // Drive sharing pages are NOT media URLs, so every Drive value is converted
-  // before it is assigned to <img> or <audio>.
   function isDriveValue(value){
     return /(?:drive\.google\.com|docs\.google\.com)/i.test(String(value || ""));
   }
@@ -345,9 +341,8 @@
     if(!path) return "";
     const value = String(path).trim();
 
-    // Raw Drive file IDs are supported too.
     if(/^[A-Za-z0-9_-]{20,}$/.test(value)){
-      return "https://drive.google.com/uc?export=download&id=" + encodeURIComponent(value);
+      return resolveDriveUrl(value);
     }
 
     if(isDriveValue(value)){
@@ -371,7 +366,9 @@
 
     if(isDriveValue(value)){
       const id = extractDriveId(value);
-      if(id) return "https://drive.google.com/thumbnail?id=" + encodeURIComponent(id) + "&sz=w1600";
+      if(id){
+        return "https://drive.google.com/thumbnail?id=" + encodeURIComponent(id) + "&sz=w1600";
+      }
     }
 
     if(/^https?:\/\//i.test(value) || value.startsWith("data:") || value.startsWith("blob:")){
@@ -379,6 +376,49 @@
     }
 
     return value;
+  }
+
+  function getDriveAudioUrls(value){
+    const id = extractDriveId(value);
+    if(!id) return [resolveAsset(value)];
+
+    // Try the normal media endpoint first, then Google's user-content
+    // download endpoint as a fallback.
+    return [
+      "https://drive.google.com/uc?export=download&id=" + encodeURIComponent(id),
+      "https://drive.usercontent.google.com/download?id=" + encodeURIComponent(id) + "&export=download&confirm=t"
+    ];
+  }
+
+  function setAudioSourceWithFallback(song){
+    if(!song || !song.audio) return;
+
+    const urls = isDriveValue(song.audio) || extractDriveId(song.audio)
+      ? getDriveAudioUrls(song.audio)
+      : [resolveAsset(song.audio)];
+
+    let attempt = 0;
+
+    const tryNext = () => {
+      if(attempt >= urls.length){
+        toast("Google Drive audio could not be played. Make sure the MP3 is shared as Anyone with the link → Viewer and is downloadable.");
+        updatePlayer();
+        return;
+      }
+
+      const url = urls[attempt++];
+      audio.src = url;
+      audio.load();
+      audio.play().catch(()=>{});
+    };
+
+    const onError = () => {
+      audio.removeEventListener("error", onError);
+      tryNext();
+    };
+
+    audio.addEventListener("error", onError);
+    tryNext();
   }
 
   function playCollection(ids){
@@ -623,14 +663,6 @@
   audio.addEventListener("play",updatePlayer);
   audio.addEventListener("pause",updatePlayer);
   audio.addEventListener("ended",nextSong);
-  audio.addEventListener("error",()=>{
-    const code = audio.error?.code;
-    const message = code === 4
-      ? "Google Drive did not provide a playable audio response. Check that the file is shared as Anyone with the link → Viewer."
-      : "Audio could not be loaded.";
-    toast(message);
-    updatePlayer();
-  });
 
   document.addEventListener("keydown",e=>{
     if(e.target.matches("input,textarea")) return;
