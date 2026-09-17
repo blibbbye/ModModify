@@ -43,34 +43,34 @@ window.MODMODIFY_LIBRARY = {
   */
   artists: [
     {
-      id: "ye",
-      name: "Ye",
-      image: "https://drive.google.com/file/d/1Z80tCgxQNn-C5fDMpdstixkgDkFUeTYH/view?usp=drive_link",
+      id: "demo-artist",
+      name: "Demo Artist",
+      image: "assets/artists/demo-artist.png",
 
       albums: [
         {
-          id: "yandhiv1",
-          name: "Yandhi V1",
-          year: 6767,
-          cover: "https://drive.google.com/file/d/1Q6G4TmxC1TEatpbgqfb_e_itnQZABDCx/view?usp=drive_link",
+          id: "demo-album",
+          name: "Demo Album",
+          year: 2026,
+          cover: "assets/covers/demo-album.png",
 
           songs: [
             {
-              id: "byebyebaby",
-              name: "BYE BYE BABY",
+              id: "demo-song",
+              name: "Demo Song",
 
               // GOOGLE DRIVE EXAMPLE:
               // audio: "https://drive.google.com/file/d/YOUR_MP3_FILE_ID/view?usp=sharing",
 
               // Local file example:
-              audio: "https://drive.google.com/file/d/1CfMCS0cpJuxwur-zWZQ5UHTLGnIt6llx/view?usp=drive_link",
+              audio: "assets/audio/demo-song.mp3",
 
               // Optional song-specific cover:
               // cover: "https://drive.google.com/file/d/YOUR_PNG_FILE_ID/view?usp=sharing",
 
-              duration: 223,
+              duration: 0,
 
-              lyrics: "This beat make me wanna see a big booty modmod"
+              lyrics: "Add your lyrics here."
             }
           ]
         }
