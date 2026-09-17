@@ -328,6 +328,13 @@
     return "";
   }
 
+  // Google Drive helpers.
+  // Drive sharing pages are NOT media URLs, so every Drive value is converted
+  // before it is assigned to <img> or <audio>.
+  function isDriveValue(value){
+    return /(?:drive\\.google\\.com|docs\\.google\\.com)/i.test(String(value || ""));
+  }
+
   function resolveDriveUrl(value){
     const id = extractDriveId(value);
     if(!id) return "";
@@ -336,14 +343,42 @@
 
   function resolveAsset(path){
     if(!path) return "";
-    const drive = resolveDriveUrl(path);
-    if(drive) return drive;
-    if(/^https?:\/\//i.test(path) || path.startsWith("data:") || path.startsWith("blob:")) return path;
-    return path;
+    const value = String(path).trim();
+
+    // Raw Drive file IDs are supported too.
+    if(/^[A-Za-z0-9_-]{20,}$/.test(value)){
+      return "https://drive.google.com/uc?export=download&id=" + encodeURIComponent(value);
+    }
+
+    if(isDriveValue(value)){
+      return resolveDriveUrl(value);
+    }
+
+    if(/^https?:\\/\\//i.test(value) || value.startsWith("data:") || value.startsWith("blob:")){
+      return value;
+    }
+
+    return value;
   }
 
   function resolveImage(path){
-    return resolveAsset(path);
+    if(!path) return "";
+    const value = String(path).trim();
+
+    if(/^[A-Za-z0-9_-]{20,}$/.test(value)){
+      return "https://drive.google.com/thumbnail?id=" + encodeURIComponent(value) + "&sz=w1600";
+    }
+
+    if(isDriveValue(value)){
+      const id = extractDriveId(value);
+      if(id) return "https://drive.google.com/thumbnail?id=" + encodeURIComponent(id) + "&sz=w1600";
+    }
+
+    if(/^https?:\\/\\//i.test(value) || value.startsWith("data:") || value.startsWith("blob:")){
+      return value;
+    }
+
+    return value;
   }
 
   function playCollection(ids){
@@ -588,6 +623,14 @@
   audio.addEventListener("play",updatePlayer);
   audio.addEventListener("pause",updatePlayer);
   audio.addEventListener("ended",nextSong);
+  audio.addEventListener("error",()=>{
+    const code = audio.error?.code;
+    const message = code === 4
+      ? "Google Drive did not provide a playable audio response. Check that the file is shared as Anyone with the link → Viewer."
+      : "Audio could not be loaded.";
+    toast(message);
+    updatePlayer();
+  });
 
   document.addEventListener("keydown",e=>{
     if(e.target.matches("input,textarea")) return;
